@@ -28,7 +28,7 @@ private val DarkColors = darkColorScheme(
 )
 
 @Composable
-fun ProfileTheme(
+fun ProfileCardLabTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
