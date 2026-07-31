@@ -3,17 +3,81 @@ package com.example.myapplication
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import com.example.myapplication.ui.theme.ProfileTheme
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContent {
-            ProfileTheme {
-                ProfileScreen()
+            MaterialTheme {
+                Surface(modifier = Modifier.fillMaxSize()) {
+                    ReactiveScreen()
+                }
             }
+        }
+    }
+}
+
+@Composable
+fun ReactiveScreen() {
+    // Part A: Counter State (Survives recomposition)
+    var count by remember { mutableStateOf(0) }
+
+    // Part B & C: Greeting State (Survives recomposition AND rotation)
+    var name by rememberSaveable { mutableStateOf("") }
+
+    Column(
+        modifier = Modifier.fillMaxSize().padding(24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        // Part B: The reactive greeting and text input
+        Text(
+            text = if (name.isBlank()) "Hello, stranger!" else "Hello, $name!",
+            fontSize = 26.sp,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(Modifier.height(16.dp))
+        OutlinedTextField(
+            value = name,
+            onValueChange = { name = it },
+            label = { Text("Enter your name") }
+        )
+        Spacer(Modifier.height(32.dp))
+
+        // Part D (Bonus): Using the hoisted, stateless counter
+        CounterControls(
+            count = count,
+            onIncrement = { count++ },
+            onDecrement = { count-- },
+            onReset = { count = 0 }
+        )
+    }
+}
+
+// Part D (Bonus): Stateless Composable component
+@Composable
+fun CounterControls(
+    count: Int,
+    onIncrement: () -> Unit,
+    onDecrement: () -> Unit,
+    onReset: () -> Unit
+) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Text(text = "Count: $count", fontSize = 24.sp)
+        Spacer(Modifier.height(16.dp))
+        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            Button(onClick = onDecrement) { Text("–") }
+            Button(onClick = onReset) { Text("Reset") }
+            Button(onClick = onIncrement) { Text("+") }
         }
     }
 }
