@@ -1,7 +1,6 @@
-package com.example.myapplication
+package com.example.grocerylist
 
 import org.junit.Test
-
 import org.junit.Assert.*
 
 /**
