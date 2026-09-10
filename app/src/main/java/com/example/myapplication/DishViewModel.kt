@@ -22,7 +22,7 @@ class DishViewModel : ViewModel() {
 
     // ---------------- DISH CRUD ----------------
 
-    // CREATE -- GIVEN. Study this pattern.
+    // CREATE
     fun addDish(name: String) {
         if (name.isBlank()) return                     // ignore empty input
         val newDish = Dish(id = nextId++, name = name.trim())
